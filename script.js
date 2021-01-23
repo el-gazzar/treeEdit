@@ -54,6 +54,7 @@ myEditor.createJstree = function (data) {
 }
 
 myEditor.treeObjToApiObj = function (treeObj, apiObj) {
+<<<<<<< HEAD
     if (!Array.isArray(treeObj) || !treeObj.length) {
         return apiObj;
     }
@@ -69,6 +70,26 @@ myEditor.treeObjToApiObj = function (treeObj, apiObj) {
     }
     return apiObj;
     
+=======
+    for (const key in treeObj) {
+        var isValueString = typeof treeObj[key.toString()] === 'string';
+
+        var jstreeNode = {
+            Text: treeObj[key.toString()]
+        };
+
+        if (!isValueString) {
+            jstreeNode.Children = [];
+        }
+
+        apiObj.push(jstreeNode);
+
+        if (!isValueString) {
+            myEditor.treeObjToApiObj(treeObj[key.toString()], apiObj[apiObj.length - 1].children);
+        }
+    }
+    return apiObj;
+>>>>>>> 5dcee6462acf5ff201b625f51d852a57ac72a512
 }
 
 myEditor.apiObjToTreeObj = function (apiObj, treeObj) {
@@ -76,7 +97,11 @@ myEditor.apiObjToTreeObj = function (apiObj, treeObj) {
         var isValueString = typeof apiObj[key.toString()] === 'string';
 
         var jstreeNode = {
+<<<<<<< HEAD
             text: key
+=======
+            text: apiObj[key.toString()]
+>>>>>>> 5dcee6462acf5ff201b625f51d852a57ac72a512
         };
 
         if (!isValueString) {
