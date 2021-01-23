@@ -54,42 +54,44 @@ myEditor.createJstree = function (data) {
 }
 
 myEditor.treeObjToApiObj = function (treeObj, apiObj) {
-    // if (!Array.isArray(treeObj) || !treeObj.length) {
-    //     return apiObj;
-    // }
+    for (const key in treeObj) {
+        var isValueString = typeof treeObj[key.toString()] === 'string';
 
-    // for (var key in treeObj) {
-    //     var children = treeObj[key].children;
-    //     if (Array.isArray(children) && children.length) {
-    //         apiObj[treeObj[key].text.toString()] = {};
-    //         myEditor.treeObjToApiObj(treeObj[key].children, apiObj[treeObj[key].text.toString()]);
-    //     } else {
-    //         apiObj[treeObj[key].text.toString()] = treeObj[key].text;
-    //     }
-    // }
-    // return apiObj;
-    return treeObj;
+        var jstreeNode = {
+            Text: treeObj[key.toString()]
+        };
+
+        if (!isValueString) {
+            jstreeNode.Children = [];
+        }
+
+        apiObj.push(jstreeNode);
+
+        if (!isValueString) {
+            myEditor.treeObjToApiObj(treeObj[key.toString()], apiObj[apiObj.length - 1].children);
+        }
+    }
+    return apiObj;
 }
 
 myEditor.apiObjToTreeObj = function (apiObj, treeObj) {
-    // for (const key in apiObj) {
-    //     var isValueString = typeof apiObj[key.toString()] === 'string';
+    for (const key in apiObj) {
+        var isValueString = typeof apiObj[key.toString()] === 'string';
 
-    //     var jstreeNode = {
-    //         text: key
-    //     };
+        var jstreeNode = {
+            text: apiObj[key.toString()]
+        };
 
-    //     if (!isValueString) {
-    //         jstreeNode.children = [];
-    //     }
+        if (!isValueString) {
+            jstreeNode.children = [];
+        }
 
-    //     treeObj.push(jstreeNode);
+        treeObj.push(jstreeNode);
 
-    //     if (!isValueString) {
-    //         myEditor.apiObjToTreeObj(apiObj[key.toString()], treeObj[treeObj.length - 1].children);
-    //     }
-    // }
+        if (!isValueString) {
+            myEditor.apiObjToTreeObj(apiObj[key.toString()], treeObj[treeObj.length - 1].children);
+        }
+    }
 
-    // return treeObj;
-    return apiObj;
+    return treeObj;
 }
